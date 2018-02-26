@@ -61,7 +61,8 @@ def draw_shape(fn, c="blue"):
     xs, ys = -1.0, -3.0
 
     plt.figure(figsize=(9, 6))
-    plt.xlim([xs, xs + wide])
+    #plt.xlim([xs, xs + wide])
+    plt.xlim(min(xc) - 1.0, max(xc) + 1.0)
     plt.ylim([ys, ys + wide])
 
     for yp in list(set(yc)):
@@ -72,3 +73,5 @@ def draw_shape(fn, c="blue"):
 
     plt.title(Path(fn).stem, style='italic')
     plt.plot(xc, yc, "o", markeredgewidth=0.0, c=c)
+
+    return (min(xc), max(xc)), (min(yc), max(yc))
