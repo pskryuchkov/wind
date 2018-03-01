@@ -17,28 +17,29 @@ FoamFile
 
 dimensions      [0 2 -2 0 0 0 0];
 
-internalField   uniform 0.375;
+internalField   uniform 0.538;
 
 boundaryField
 {
     inlet
     {
         type            fixedValue;
-        value           uniform 0.375;
+        value           $internalField;
     }
     outlet
     {
-        type            zeroGradient;
+        type            fixedValue;
+        value           $internalField;
     }
     topbottom
     {
         type            kqRWallFunction;
-        value           uniform 0.375;
+        value           $internalField;
     }
     car
     {
         type            kqRWallFunction;
-        value           uniform 0.375;
+        value           $internalField;
     }
     frontback
     {

@@ -11,34 +11,35 @@ FoamFile
     format      ascii;
     class       volScalarField;
     location    "0";
-    object      epsilon;
+    object      omega;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 2 -3 0 0 0 0];
+dimensions      [0 0 -1 0 0 0 0];
 
-internalField   uniform 14.855;
+internalField   uniform 1.63;
 
 boundaryField
 {
     inlet
     {
         type            fixedValue;
-        value           uniform 14.855;
+        value           $internalField;
     }
     outlet
     {
-        type            zeroGradient;
+        type            fixedValue;
+        value           $internalField;
     }
     topbottom
     {
-        type            epsilonWallFunction;
-        value           uniform 14.855;
+        type            omegaWallFunction;
+        value           $internalField;
     }
     car
     {
-        type            epsilonWallFunction;
-        value           uniform 14.855;
+        type            omegaWallFunction;
+        value           $internalField;
     }
     frontback
     {

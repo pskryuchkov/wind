@@ -1,8 +1,8 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.3.1                                 |
-|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|  \\    /   O peration     | Version:  4.1                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -13,62 +13,74 @@ FoamFile
     object      fvSolution;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-//The following variables must have line numbers of 17-18.
-myPTolerance 1e-2;
-myUTolerance 1e-5;
-myTurbTolerance 1e-6;
-myRelaxation 1;
 
 solvers
 {
-    "(p|pFinal|pcorr)"
+    p
     {
-	solver		 	GAMG;
-	mergeLevels 1;
-	smoother 		GaussSeidel;
-	agglomerator 		faceAreaPair;
-	nCellsInCoarsestLevel 1000;
-	tolerance 		$myPTolerance;
-	relTol 0.1;
+        solver           GAMG;
+        tolerance        1e-7;
+        relTol           0.01;
+        smoother         GaussSeidel;
     }
-    "(k|kFinal|omega|omegaFinal|epsilon|epsilonFinal|nuTilda|nuTildaFinal)"
+
+    Phi
     {
-        solver           smoothSolver;//PBiCG
-        smoother         GaussSeidel;//preconditioner   DILU;
-        tolerance        $myTurbTolerance;
-        relTol 0.1;
+        $p;
     }
-    "(U|UFinal)"
+
+    U
     {
-	solver		 smoothSolver;//PBiCG
-        smoother	 GaussSeidel;//preconditioner   DILU;
-        tolerance        $myUTolerance;
-	relTol 0.1;
+        solver           smoothSolver;
+        smoother         GaussSeidel;
+        tolerance        1e-8;
+        relTol           0.1;
+        nSweeps          1;
+    }
+
+    k
+    {
+        solver           smoothSolver;
+        smoother         GaussSeidel;
+        tolerance        1e-8;
+        relTol           0.1;
+        nSweeps          1;
+    }
+
+    omega
+    {
+        solver           smoothSolver;
+        smoother         GaussSeidel;
+        tolerance        1e-8;
+        relTol           0.1;
+        nSweeps          1;
     }
 }
 
-PIMPLE
+SIMPLE
 {
-    correctPhi          	no;
-    nOuterCorrectors 		1;
-    nCorrectors 		3;
-    nNonOrthogonalCorrectors 	1;
-    pRefCell           		0;
-    pRefValue           	0;
+    nNonOrthogonalCorrectors 0;
+    consistent yes;
 }
+
+potentialFlow
+{
+    nNonOrthogonalCorrectors 10;
+}
+
 relaxationFactors
 {
-    fields
-    {
-        p               $myRelaxation;
-    }
     equations
     {
-        k               $myRelaxation;
-        U               $myRelaxation;
-        omega           $myRelaxation;
-        epsilon         $myRelaxation;
-        nuTilda         $myRelaxation;
+        U               0.9;
+        k               0.7;
+        omega           0.7;
     }
 }
+
+cache
+{
+    grad(U);
+}
+
 // ************************************************************************* //

@@ -15,13 +15,13 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-applicationClass	pimpleFoam;
+applicationClass	simpleFoam;
 startFrom        	latestTime;
-endTime			0.1;
+endTime			1.0;
 stopAt 			endTime;
 deltaT			0.0005;
 writeControl    	adjustableRunTime;
-writeInterval		0.005;
+writeInterval		0.01;
 cycleWrite      	0;
 writeFormat     	ascii;
 writePrecision		6;
